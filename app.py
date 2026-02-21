@@ -56,8 +56,8 @@ if uploaded:
         st.write(insights)
 
         st.subheader("📈 Charts")
-        for c in charts:
-            st.image(c)
+        for fig in charts:
+            st.plotly_chart(fig, use_container_width=True)
 
         with open(report, "rb") as f:
             st.download_button("📄 Download Report", f, "AI_EDA_Report.pdf")

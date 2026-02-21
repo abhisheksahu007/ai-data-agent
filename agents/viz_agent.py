@@ -1,37 +1,31 @@
 import plotly.express as px
-import os
 
 class VizAgent:
 
     @staticmethod
     def generate(df, plan):
-        os.makedirs("charts", exist_ok=True)
         charts = []
 
+        # numeric distributions
         if "distribution" in plan:
             for col in df.select_dtypes(include="number").columns[:3]:
-                fig = px.histogram(df, x=col)
-                path = f"charts/{col}.png"
-                fig.write_image(path)
-                charts.append(path)
+                fig = px.histogram(df, x=col, title=f"Distribution of {col}")
+                charts.append(fig)
 
+        # correlation heatmap
         if "correlation" in plan:
             corr = df.corr(numeric_only=True)
-            fig = px.imshow(corr, text_auto=True)
-            path = "charts/correlation.png"
-            fig.write_image(path)
-            charts.append(path)
+            fig = px.imshow(corr, text_auto=True, title="Correlation Heatmap")
+            charts.append(fig)
 
-        if "category" in plan and len(df.select_dtypes(exclude="number").columns) > 0:
-            cat = df.select_dtypes(exclude="number").columns[0]
-
-            vc = df[cat].value_counts().reset_index()
+        # categorical analysis
+        cat_cols = df.select_dtypes(exclude="number").columns
+        if "category" in plan and len(cat_cols) > 0:
+            cat = cat_cols[0]
+            vc = df[cat].value_counts().head(10).reset_index()
             vc.columns = [cat, "count"]
 
-            fig = px.bar(vc, x=cat, y="count")
-
-            path = "charts/category.png"
-            fig.write_image(path)
-            charts.append(path)
+            fig = px.bar(vc, x=cat, y="count", title=f"{cat} Distribution")
+            charts.append(fig)
 
         return charts
