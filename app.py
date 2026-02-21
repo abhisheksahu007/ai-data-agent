@@ -67,4 +67,10 @@ if uploaded:
             st.plotly_chart(fig, use_container_width=True)
 
         with open(report, "rb") as f:
-            st.download_button("📄 Download Report", f, "AI_EDA_Report.pdf")
+            st.download_button(
+                label="📄 Download Report",
+                data=f,
+                file_name="AI_EDA_Report.pdf",
+                mime="application/pdf",
+                key="download_report_btn"
+            )
