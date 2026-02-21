@@ -50,7 +50,7 @@ if uploaded:
 
             insights = InsightAgent.generate(metadata, stats, outliers)
 
-            report = ReportAgent.build(insights, charts)
+            report = ReportAgent.build(insights)
 
         st.subheader("📊 Insights")
         st.write(insights)
