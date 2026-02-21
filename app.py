@@ -50,7 +50,14 @@ if uploaded:
 
             insights = InsightAgent.generate(metadata, stats, outliers)
 
-            report = ReportAgent.build(insights)
+            try:
+                report = ReportAgent.build(insights)
+
+                with open(report, "rb") as f:
+                    st.download_button("📄 Download Report", f, "AI_EDA_Report.pdf")
+
+            except Exception as e:
+                st.warning("Report generation skipped due to formatting issue.")
 
         st.subheader("📊 Insights")
         st.write(insights)
